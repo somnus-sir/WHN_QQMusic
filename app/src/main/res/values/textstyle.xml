@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="textNormal">
+        <item name = "android:textColor">#fff</item>
+        <item name = "android:textStyle">normal</item>
+    </style>
+
+
+    <style name="textSelected">
+        <item name = "android:textColor">#bfff</item>
+        <item name = "android:textStyle">bold</item>
+    </style>
+
+</resources>

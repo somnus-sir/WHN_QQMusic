@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:id="@+id/ll_musicbg_musicplayer"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
+    android:background="@mipmap/bg1"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:src="@drawable/selector_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:text="忘情水"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:src="@mipmap/threepoint" />
+
+    </RelativeLayout>
+
+    <com.whn.whn.whn_qqmusic.lyric.LyricView
+        android:id="@+id/lyric"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_margin="6dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_time_left"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="3:48"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/sb_progress"
+            style="@android:style/Widget.SeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxHeight="3dp"
+            android:layout_weight="8"
+            android:minHeight="3dp"
+            android:progress="50"
+            android:progressDrawable="@drawable/audio_seekbar_drawable"
+            android:thumb="@drawable/audio_seek_thumb" />
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="3:48"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+
+
+
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/iv_playmode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/selector_playmode_list" />
+
+        <ImageView
+            android:id="@+id/iv_pre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/selector_pre" />
+
+        <ImageView
+            android:id="@+id/iv_play_pause"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/selector_play" />
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/selector_next" />
+
+        <ImageView
+            android:id="@+id/iv_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/selector_list" />
+
+    </LinearLayout>
+</LinearLayout>

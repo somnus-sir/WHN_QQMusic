@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_notification"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+<ImageView
+    android:id="@+id/iv_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/music_default_bg"
+    android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/tv_notification_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_icon"
+        android:layout_marginTop="5dp"
+        android:text="忘情水"
+        android:textColor="#000000"
+        android:textSize="18sp"/>
+    <TextView
+        android:id="@+id/tv_notification_artist"
+        android:layout_below="@id/tv_notification_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_icon"
+        android:text="刘德华"
+        android:textColor="#99000000"
+        android:textSize="16sp"/>
+    <ImageView
+        android:id="@+id/iv_notification_next"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/selector_next"
+        android:layout_margin="5dp"/>
+    <ImageView
+        android:id="@+id/iv_notification_pre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/iv_notification_next"
+        android:src="@drawable/selector_pre"
+        android:layout_margin="5dp"/>
+</RelativeLayout>

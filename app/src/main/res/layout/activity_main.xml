@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#31C27C"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/iv_menu_main"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/celalan" />
+
+        <RadioGroup
+            android:id="@+id/rg_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="#00000000"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_me_main"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:button="@null"
+                android:gravity="center"
+                android:text="我的"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/rb_music_main"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:button="@null"
+                android:gravity="center"
+                android:text="音乐馆"
+                android:textColor="#bfff"
+                android:textSize="18sp" />
+
+
+            <RadioButton
+                android:id="@+id/rb_find_main"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:button="@null"
+                android:gravity="center"
+                android:text="发现"
+                android:textColor="#bfff"
+                android:textSize="18sp" />
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/iv_find_main"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/fangfajing" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fl_fragment_main"/>
+
+</LinearLayout>
