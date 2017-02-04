@@ -125,7 +125,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
      */
     private void updatalyric() {
         mLyricView.updateLyrics(music.getCurrentPosition(), music.getDuration());
-        handler.sendEmptyMessageDelayed(UPDATA_LYRIC, 100);
+        handler.sendEmptyMessageDelayed(UPDATA_LYRIC, 50);
     }
 
     private void updataPlayedTime() {

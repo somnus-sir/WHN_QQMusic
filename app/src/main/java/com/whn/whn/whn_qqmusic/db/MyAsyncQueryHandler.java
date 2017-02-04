@@ -8,7 +8,7 @@ import com.whn.whn.whn_qqmusic.adapter.MusicAdapter;
 
 
 /**
- * Created by fullcircle on 2017/1/15.
+ * Created by whn on 2017/1/15.
  */
 
 public class MyAsyncQueryHandler extends AsyncQueryHandler {

@@ -120,9 +120,10 @@ public class MusicPlayerService extends Service {
      * 切换歌曲---就是根据当前的播放模式来修改 currentposition
      */
     public void preNext(int mode) {
-        sendBroadcast(new Intent("com.whn.changeBG"));
+
         switch (currentMode) {
             case PLAY_MODE_LIST:
+                sendBroadcast(new Intent("com.whn.changeBG"));//更改背景
                 if (mode == PLAY_PRE) {
                     //如果是第一首 移动到列表的最后一首继续播
                     currentPosition = currentPosition == 0 ? musics.size() - 1 : --currentPosition;
@@ -132,6 +133,7 @@ public class MusicPlayerService extends Service {
                 break;
 
             case PLAY_MODE_SHUFFLE:
+                sendBroadcast(new Intent("com.whn.changeBG"));//更改背景
                 Random random = new Random();
                 int temp = random.nextInt(musics.size());
                 while (temp == currentPosition) {
@@ -140,9 +142,8 @@ public class MusicPlayerService extends Service {
                 currentPosition = temp;
                 break;
 
-            // case PLAY_MODE_SINGLE:
-            //单曲循环不需要修改播放的索引 不做处理
-            // break;
+            case PLAY_MODE_SINGLE:
+                break;
         }
         //重新播放音乐
         startplay();

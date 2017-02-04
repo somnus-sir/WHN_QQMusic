@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
-    app:cardElevation="3dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
-
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -35,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="歌曲名字"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_artist"
@@ -43,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="刘德华"
                 android:textColor="#cccccc"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <TextView
@@ -53,7 +52,7 @@
             android:layout_margin="5dp"
             android:text="3.0MB"
             android:textColor="#cccccc"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

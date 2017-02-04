@@ -6,7 +6,7 @@ import com.whn.whn.whn_qqmusic.R;
 
 
 /**
- * Created by fullcircle on 2017/1/15.
+ * Created by whn on 2017/1/15.
  */
 
 public class MusicFragment extends BaseFragment {

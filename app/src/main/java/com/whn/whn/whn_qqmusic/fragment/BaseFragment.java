@@ -33,8 +33,6 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 获取当前fragment的布局文件的id
-     *
-     * @return
      */
     public abstract int getLayoutId();
 
