@@ -52,20 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SystemBarTint();//设置沉浸式状态栏的颜色
         initView();//初始化view
 
-
-        //初始化选中"我的"
-//        checkedRadioButtonId = R.id.rb_me_main;
-//        BaseFragment fragment = FragmentFactory.createFragment(checkedRadioButtonId);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.fl_fragment_main, fragment);
-//        transaction.commit();
         createFragment(R.id.rb_me_main);
-
-        //相应的改变GroupButton的Button状态,颜色,文字大小,文字style
-
-
-        //TODO--------------
-
     }
 
     /**

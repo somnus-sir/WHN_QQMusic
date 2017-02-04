@@ -20,8 +20,6 @@ public class MusicItem implements Serializable{
 
     /**
      * 传入游标返回一个音乐bean
-     * @param cursor
-     * @return
      */
     public static MusicItem getMusicFromCursor(Cursor cursor){
         if(cursor == null){

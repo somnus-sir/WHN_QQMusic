@@ -74,6 +74,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private int[] pics = new int[]{R.mipmap.bg1, R.mipmap.bg2, R.mipmap.bg3, R.mipmap.bg4};
 
 
+    /**
+     * handler循环
+     */
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -87,6 +90,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
             }
         }
     };
+    private int oldi;
+    private int newi;
 
 
     @Override
@@ -107,12 +112,17 @@ public class MusicPlayerActivity extends AppCompatActivity {
         initService();
         initView();
 
+        //广播接受者,控制,更新歌词,更新播放时间
         receiver = new MyReceiver();
-        IntentFilter filter = new IntentFilter("com.itheima.startPlay");
-        filter.addAction("com.itheima.stopPlay");
+        IntentFilter filter = new IntentFilter("com.whn.startPlay");
+        filter.addAction("com.whn.stopPlay");
+        filter.addAction("com.whn.changeBG");
         registerReceiver(receiver, filter);
     }
 
+    /**
+     * 更新歌词
+     */
     private void updatalyric() {
         mLyricView.updateLyrics(music.getCurrentPosition(), music.getDuration());
         handler.sendEmptyMessageDelayed(UPDATA_LYRIC, 100);
@@ -142,15 +152,29 @@ public class MusicPlayerActivity extends AppCompatActivity {
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
     }
 
+
+    /**
+     * 初始化view
+     */
     private void initView() {
-        //初始化背景
-        Random random = new Random();
-        llMusicbgMusicplayer.setBackgroundResource(pics[random.nextInt(4)]);
-
-
+        changeBackground();
         //progress监听
         sbProgress.setOnSeekBarChangeListener(new MyOnSeekBarChangeListener());
     }
+
+    /**
+     * 改变背景
+     */
+    public void changeBackground(){
+        Random random = new Random();
+        newi = random.nextInt(4);
+        while(newi==oldi){
+            newi = random.nextInt(4);
+        }
+        oldi = newi;
+        llMusicbgMusicplayer.setBackgroundResource(pics[newi]);
+    }
+
 
     @OnClick({R.id.iv_playmode, R.id.iv_pre, R.id.iv_play_pause, R.id.iv_next, R.id.iv_list, R.id.iv_back})
     public void onClick(View view) {
@@ -180,6 +204,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 更新播放模式的图标
+     */
     private void updatePlayModeIcon() {
         switch (MusicPlayerService.currentMode) {
             case MusicPlayerService.PLAY_MODE_LIST:
@@ -252,25 +279,34 @@ public class MusicPlayerActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
-    private class MyReceiver extends BroadcastReceiver {
 
+    /**
+     * 广播接受者
+     */
+    private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if ("com.itheima.startPlay".equals(action)) {
+            if ("com.whn.startPlay".equals(action)) {
                 initPlayerUI();
                 updataPlayedTime();
                 updatePlayModeIcon();
-                //加载歌词文件 解析
+                //加载歌词文件 解析   ---   必须将displayName,和歌词统一或者包含关系!
                 String fileName = music.getCurrentMusic().displayName.split("\\.")[0];
+                // Toast.makeText(context, fileName, Toast.LENGTH_SHORT).show();
+                if (fileName.contains("三生三世")) {
+                    fileName = "sanshengsanshi";
+                }
                 File file = new File(Environment.getExternalStorageDirectory(), fileName + ".txt");
                 mLyricView.loadLyrics(file);
                 //更新歌词
                 updatalyric();
-            } else if ("com.itheima.stopPlay".equals(action)) {
+            } else if ("com.whn.stopPlay".equals(action)) {
                 handler.removeMessages(UPDATA_PLAYED_TIME);
                 //移除所有的消息
                 handler.removeCallbacksAndMessages(null);
+            }else if("com.whn.changeBG".equals(action)){
+                changeBackground();//更换歌曲接受广播更换背景
             }
         }
     }
@@ -292,6 +328,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 更新播放,暂停图标
+     */
     private void updatPlayPauseIcon() {
         if (music.isPlaying()) {
             ivPlayPause.setImageResource(R.drawable.selector_play);

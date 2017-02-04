@@ -97,7 +97,7 @@ public class MusicPlayerService extends Service {
     }
 
     private void stopUpdateUI() {
-        sendBroadcast(new Intent("com.itheima.stopPlay"));
+        sendBroadcast(new Intent("com.whn.stopPlay"));
     }
 
     /**
@@ -115,9 +115,12 @@ public class MusicPlayerService extends Service {
         }
     }
 
+
+    /**
+     * 切换歌曲---就是根据当前的播放模式来修改 currentposition
+     */
     public void preNext(int mode) {
-        //就是根据当前的播放模式来修改 currentposition
-        //就是正在播放的歌曲在列表中的索引
+        sendBroadcast(new Intent("com.whn.changeBG"));
         switch (currentMode) {
             case PLAY_MODE_LIST:
                 if (mode == PLAY_PRE) {
@@ -127,9 +130,7 @@ public class MusicPlayerService extends Service {
                     currentPosition = (++currentPosition) % musics.size();
                 }
                 break;
-//                case PLAY_MODE_SINGLE:
-            //单曲循环不需要修改播放的索引 不做处理
-//                    break;
+
             case PLAY_MODE_SHUFFLE:
                 Random random = new Random();
                 int temp = random.nextInt(musics.size());
@@ -138,6 +139,10 @@ public class MusicPlayerService extends Service {
                 }
                 currentPosition = temp;
                 break;
+
+            // case PLAY_MODE_SINGLE:
+            //单曲循环不需要修改播放的索引 不做处理
+            // break;
         }
         //重新播放音乐
         startplay();
@@ -180,14 +185,14 @@ public class MusicPlayerService extends Service {
             }
 
         } else {
-            //获取到所有音乐的信息
+            //数据从activity中传递 获取到所有音乐的信息
             musics = (ArrayList<MusicItem>) intent.getSerializableExtra("musics");
             //获取到了当前点击的条目位置
             int temp = intent.getIntExtra("position", 0);
 
             if (temp == currentPosition) {
                 //如果点击的条目 跟当前的音乐是同一首 不做音乐播放处理
-//           通知更新界面
+                // 通知更新界面
                 notifyPlayerUPdateUI();
             } else {
                 //如果点击的条目 跟当前的音乐不是一首 再重置处理
@@ -201,6 +206,10 @@ public class MusicPlayerService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+
+    /**
+     * 开始,或者重新播放音乐
+     */
     private void startplay() {
         Log.e(getClass().getSimpleName(), "curretn====" + currentPosition);
         if (mMediaplayer == null) {
@@ -223,7 +232,6 @@ public class MusicPlayerService extends Service {
             });
         } else {
             //说明是切换歌曲的操作
-
             //先停止更新ui
             stopUpdateUI();
             //重置mediaplayer
@@ -252,7 +260,7 @@ public class MusicPlayerService extends Service {
 
     private void notifyPlayerUPdateUI() {
         //发送广播 通知activity 音乐已经开始播放了 可以更新UI
-        sendBroadcast(new Intent("com.itheima.startPlay"));
+        sendBroadcast(new Intent("com.whn.startPlay"));
     }
 
     private void sendNormalNotification() {

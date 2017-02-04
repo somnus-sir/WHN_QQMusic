@@ -230,6 +230,11 @@ public class LyricView extends TextView {
         }
     }
 
+    /**
+     * 更新歌词
+     * @param currentTime
+     * @param duration
+     */
     public void updateLyrics(int currentTime,int duration){
         this.duration = duration;
         this.currentTime = currentTime;
