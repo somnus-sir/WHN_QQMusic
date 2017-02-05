@@ -43,6 +43,8 @@
     </RelativeLayout>
 
     <com.whn.whn.whn_qqmusic.lyric.LyricView
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:id="@+id/lyric"
         android:layout_width="match_parent"
         android:layout_height="0dp"

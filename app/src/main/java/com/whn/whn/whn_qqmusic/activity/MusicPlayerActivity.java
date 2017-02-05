@@ -261,6 +261,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         super.onStart();
         if (music != null) {
             handler.sendEmptyMessage(UPDATA_PLAYED_TIME);
+            handler.sendEmptyMessage(UPDATA_LYRIC);
         }
     }
 

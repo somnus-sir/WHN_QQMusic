@@ -23,7 +23,7 @@ public class LyricsParser  {
         ArrayList<Lyric> lyricsList = new ArrayList<>();
         // 数据可用性检查
         if (lyricsFile == null || !lyricsFile.exists()) {
-            lyricsList.add(new Lyric("没有找到歌词文件。",0));
+            lyricsList.add(new Lyric("没有找到歌词文件",0));
             return lyricsList;
         }
 
@@ -34,7 +34,6 @@ public class LyricsParser  {
             while (line!=null){
                 List<Lyric> lineList = parserLine(line);
                 lyricsList.addAll(lineList);
-
                 line = buffer.readLine();
             }
 
