@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -21,7 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.whn.whn.whn_qqmusic.R;
 import com.whn.whn.whn_qqmusic.bean.MusicItem;
 import com.whn.whn.whn_qqmusic.lyric.LyricView;
@@ -36,7 +43,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
- * Created by fullcircle on 2017/1/15.
+ * Created by whn on 2017/1/15.
  */
 public class MusicPlayerActivity extends AppCompatActivity {
     private static final int UPDATA_PLAYED_TIME = 1;
@@ -92,6 +99,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
     };
     private int oldi;
     private int newi;
+    private String url;
+    private String target;
+    private String downloadUrl;
+    private HttpUtils httpUtils;
+    private String musicName;
 
 
     @Override
@@ -157,6 +169,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
      * 初始化view
      */
     private void initView() {
+        httpUtils = new HttpUtils();
         changeBackground();
         //progress监听
         sbProgress.setOnSeekBarChangeListener(new MyOnSeekBarChangeListener());
@@ -165,10 +178,10 @@ public class MusicPlayerActivity extends AppCompatActivity {
     /**
      * 改变背景
      */
-    public void changeBackground(){
+    public void changeBackground() {
         Random random = new Random();
         newi = random.nextInt(4);
-        while(newi==oldi){
+        while (newi == oldi) {
             newi = random.nextInt(4);
         }
         oldi = newi;
@@ -285,6 +298,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
      * 广播接受者
      */
     private class MyReceiver extends BroadcastReceiver {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -292,13 +306,18 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 initPlayerUI();
                 updataPlayedTime();
                 updatePlayModeIcon();
-                //加载歌词文件 解析   ---   必须将displayName,和歌词统一或者包含关系!
+                //加载歌词文件名称
                 String fileName = music.getCurrentMusic().displayName.split("\\.")[0];
-                // Toast.makeText(context, fileName, Toast.LENGTH_SHORT).show();
                 if (fileName.contains("三生三世")) {
                     fileName = "sanshengsanshi";
                 }
-                File file = new File(Environment.getExternalStorageDirectory(), fileName + ".txt");
+                File file = new File(Environment.getExternalStorageDirectory(), fileName + ".lrc");
+
+                //网络获取歌词url
+                if (!file.exists()) {
+                    getLyricUrl(file, fileName);
+                }
+
                 mLyricView.loadLyrics(file);
                 //更新歌词
                 updatalyric();
@@ -306,11 +325,12 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 handler.removeMessages(UPDATA_PLAYED_TIME);
                 //移除所有的消息
                 handler.removeCallbacksAndMessages(null);
-            }else if("com.whn.changeBG".equals(action)){
+            } else if ("com.whn.changeBG".equals(action)) {
                 changeBackground();//更换歌曲接受广播更换背景
             }
         }
     }
+
 
     /**
      * 初始化播放器界面
@@ -338,5 +358,55 @@ public class MusicPlayerActivity extends AppCompatActivity {
         } else {
             ivPlayPause.setImageResource(R.drawable.selector_pause);
         }
+    }
+
+
+    /**
+     * 下载歌词的方法
+     */
+    private void downloadLyric(String url) {
+        httpUtils.download(url, target, new RequestCallBack<File>() {
+            @Override
+            public void onSuccess(ResponseInfo<File> responseInfo) {
+                File result = responseInfo.result;
+                Toast.makeText(getApplicationContext(), "下载歌词成功", Toast.LENGTH_SHORT).show();
+                mLyricView.loadLyrics(result);
+                //更新歌词
+                updatalyric();
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Toast.makeText(getApplicationContext(), e + s, Toast.LENGTH_SHORT).show();
+                Log.d("MusicPlayerActivity", "onFailure: " + e + s);
+            }
+        });
+
+    }
+
+    /**
+     * 获取歌词请求地址
+     */
+    private void getLyricUrl(File file, String fileName) {
+        //网络下载歌词
+        musicName = fileName.split("-")[1].split("\\[")[0].trim();
+        target = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".lrc";
+        url = "http://geci.me/api/lyric/" + musicName;
+        httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                //获取下载地址
+                String s = responseInfo.result;
+                downloadUrl = s.split("\"lrc\":\"")[1].split("\"")[0];
+                Toast.makeText(getApplicationContext(), downloadUrl, Toast.LENGTH_SHORT).show();
+                downloadLyric(downloadUrl);
+            }
+
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+
+            }
+        });
     }
 }

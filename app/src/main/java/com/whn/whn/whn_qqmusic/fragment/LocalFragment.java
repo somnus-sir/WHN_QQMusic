@@ -61,6 +61,7 @@ public class LocalFragment extends BaseFragment {
                     Intent intent = new Intent(getContext(), MusicPlayerActivity.class);
                     intent.putExtra("musics", musics);
                     intent.putExtra("position", position);
+                    intent.putExtra("fromNotification",false);
                     startActivity(intent);
                 }
             }
