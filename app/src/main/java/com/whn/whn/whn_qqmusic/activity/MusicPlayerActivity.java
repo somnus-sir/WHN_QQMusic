@@ -14,7 +14,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -25,10 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest;
 import com.whn.whn.whn_qqmusic.R;
 import com.whn.whn.whn_qqmusic.bean.MusicItem;
 import com.whn.whn.whn_qqmusic.lyric.LyricView;
@@ -104,6 +99,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private String downloadUrl;
     private HttpUtils httpUtils;
     private String musicName;
+    private String fileName;
 
 
     @Override
@@ -307,16 +303,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 updataPlayedTime();
                 updatePlayModeIcon();
                 //加载歌词文件名称
-                String fileName = music.getCurrentMusic().displayName.split("\\.")[0];
-                if (fileName.contains("三生三世")) {
-                    fileName = "sanshengsanshi";
-                }
-                File file = new File(Environment.getExternalStorageDirectory(), fileName + ".lrc");
+                fileName = music.getCurrentMusic().displayName.split("\\.")[0];
+                musicName = fileName.split("-")[1].split("\\[")[0].trim();
+                File file = new File(Environment.getExternalStorageDirectory(), musicName + ".lrc");
 
-                //网络获取歌词url
-                if (!file.exists()) {
-                    getLyricUrl(file, fileName);
-                }
+                Toast.makeText(context, musicName, Toast.LENGTH_SHORT).show();
 
                 mLyricView.loadLyrics(file);
                 //更新歌词
@@ -364,49 +355,49 @@ public class MusicPlayerActivity extends AppCompatActivity {
     /**
      * 下载歌词的方法
      */
-    private void downloadLyric(String url) {
-        httpUtils.download(url, target, new RequestCallBack<File>() {
-            @Override
-            public void onSuccess(ResponseInfo<File> responseInfo) {
-                File result = responseInfo.result;
-                Toast.makeText(getApplicationContext(), "下载歌词成功", Toast.LENGTH_SHORT).show();
-                mLyricView.loadLyrics(result);
-                //更新歌词
-                updatalyric();
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-                Toast.makeText(getApplicationContext(), e + s, Toast.LENGTH_SHORT).show();
-                Log.d("MusicPlayerActivity", "onFailure: " + e + s);
-            }
-        });
-
-    }
+//    private void downloadLyric(String url) {
+//        httpUtils.download(url, target, new RequestCallBack<File>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<File> responseInfo) {
+//                File result = responseInfo.result;
+//                Toast.makeText(getApplicationContext(), "下载歌词成功", Toast.LENGTH_SHORT).show();
+//                mLyricView.loadLyrics(result);
+//                //更新歌词
+//                updatalyric();
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//                Toast.makeText(getApplicationContext(), e + s, Toast.LENGTH_SHORT).show();
+//                Log.d("MusicPlayerActivity", "onFailure: " + e + s);
+//            }
+//        });
+//
+//    }
 
     /**
      * 获取歌词请求地址
      */
-    private void getLyricUrl(File file, String fileName) {
-        //网络下载歌词
-        musicName = fileName.split("-")[1].split("\\[")[0].trim();
-        target = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".lrc";
-        url = "http://geci.me/api/lyric/" + musicName;
-        httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                //获取下载地址
-                String s = responseInfo.result;
-                downloadUrl = s.split("\"lrc\":\"")[1].split("\"")[0];
-                Toast.makeText(getApplicationContext(), downloadUrl, Toast.LENGTH_SHORT).show();
-                downloadLyric(downloadUrl);
-            }
-
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-
-            }
-        });
-    }
+//    private void getLyricUrl(File file, String fileName) {
+//        //网络下载歌词
+//        musicName = fileName.split("-")[1].split("\\[")[0].trim();
+//        target = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".lrc";
+//        url = "http://geci.me/api/lyric/" + musicName;
+//        httpUtils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                //获取下载地址
+//                String s = responseInfo.result;
+//                downloadUrl = s.split("\"lrc\":\"")[1].split("\"")[0];
+//                Toast.makeText(getApplicationContext(), downloadUrl, Toast.LENGTH_SHORT).show();
+//                downloadLyric(downloadUrl);
+//            }
+//
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//
+//            }
+//        });
+//    }
 }

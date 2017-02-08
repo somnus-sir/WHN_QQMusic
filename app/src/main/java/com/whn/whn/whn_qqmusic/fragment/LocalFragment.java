@@ -83,6 +83,7 @@ public class LocalFragment extends BaseFragment {
         initData();
     }
 
+
     public void initData() {
         //内容解析者 访问内容提供者
         ContentResolver contentResolver = getActivity().getContentResolver();

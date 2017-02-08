@@ -6,6 +6,7 @@
     <dimen name="nomalFontSize">18sp</dimen>
     <dimen name="lineHeight">24sp</dimen>
 
+    <dimen name="padding">5dp</dimen>
 
 
     <dimen name="textSizeNormal">18sp</dimen>

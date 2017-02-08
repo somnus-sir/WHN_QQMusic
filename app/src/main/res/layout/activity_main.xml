@@ -67,12 +67,15 @@
                 android:textSize="18sp" />
         </RadioGroup>
 
-        <ImageView
-            android:id="@+id/iv_find_main"
+        <Button
+            android:id="@+id/bt_find_main"
             android:layout_width="36dp"
+            android:layout_marginTop="2dp"
+            android:layout_centerVertical="true"
             android:layout_height="36dp"
+            android:layout_marginRight="4dp"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/fangfajing" />
+            android:background="@mipmap/refresh"/>
     </RelativeLayout>
 
     <FrameLayout

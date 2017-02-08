@@ -6,16 +6,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.whn.whn.whn_qqmusic.R;
 import com.whn.whn.whn_qqmusic.factory.FragmentFactory;
 import com.whn.whn.whn_qqmusic.fragment.BaseFragment;
+import com.whn.whn.whn_qqmusic.fragment.LocalFragment;
 import com.whn.whn.whn_qqmusic.utils.DisplayUtils;
 
 import java.util.ArrayList;
@@ -35,12 +38,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RadioButton rbFindMain;
     @InjectView(R.id.rg_main)
     RadioGroup rgMain;
-    @InjectView(R.id.iv_find_main)
-    ImageView ivFindMain;
     @InjectView(R.id.activity_main)
     LinearLayout activityMain;
     @InjectView(R.id.fl_fragment_main)
     FrameLayout ivFragmentMain;
+    @InjectView(R.id.bt_find_main)
+    Button btFindMain;
     private int checkedRadioButtonId;
     private ArrayList<RadioButton> buttons;
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rbFindMain.setOnClickListener(this);
         rbMeMain.setOnClickListener(this);
         rbMusicMain.setOnClickListener(this);
+        btFindMain.setOnClickListener(this);
 
         buttons = new ArrayList<>();
         buttons.add(rbFindMain);
@@ -69,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttons.add(rbMusicMain);
 
     }
-
 
 
     @Override
@@ -88,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rb_find_main:
                 changedShow(rbFindMain);
                 createFragment(R.id.rb_find_main);
+                break;
+
+            case R.id.bt_find_main:
+                Toast.makeText(this, "刷新列表", Toast.LENGTH_SHORT).show();
+                LocalFragment fragment = (LocalFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_main);
+                fragment.initData();
                 break;
         }
     }
@@ -139,4 +148,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tintManager.setNavigationBarTintResource(R.color.colorPrimary);
         }
     }
+
+
 }
