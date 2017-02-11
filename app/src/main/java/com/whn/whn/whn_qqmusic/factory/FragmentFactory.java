@@ -2,9 +2,7 @@ package com.whn.whn.whn_qqmusic.factory;
 
 import com.whn.whn.whn_qqmusic.R;
 import com.whn.whn.whn_qqmusic.fragment.BaseFragment;
-import com.whn.whn.whn_qqmusic.fragment.FindFragment;
 import com.whn.whn.whn_qqmusic.fragment.LocalFragment;
-import com.whn.whn.whn_qqmusic.fragment.MusicFragment;
 
 import java.util.HashMap;
 
@@ -19,12 +17,12 @@ public class FragmentFactory {
                 case R.id.rb_me_main:
                     fragment = new LocalFragment();
                     break;
-                case R.id.rb_music_main:
-                    fragment = new MusicFragment();
-                    break;
-                case R.id.rb_find_main:
-                    fragment = new FindFragment();
-                    break;
+//                case R.id.rb_music_main:
+//                    fragment = new MusicFragment();
+//                    break;
+//                case R.id.rb_find_main:
+//                    fragment = new FindFragment();
+//                    break;
             }
             hashMap.put(id,fragment);
         }

@@ -8,6 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="my_dialog">
+        <item name="android:windowNoTitle">true</item>
+        <!--对话框的背景颜色是否变暗-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    <style name="dialogstyle" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
 
 
 

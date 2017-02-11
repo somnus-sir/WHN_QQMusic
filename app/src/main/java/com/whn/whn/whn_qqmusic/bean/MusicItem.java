@@ -6,7 +6,7 @@ import android.provider.MediaStore;
 import java.io.Serializable;
 
 /**
- * Created by fullcircle on 2017/1/15.
+ * Created by whn on 2017/1/15.
  */
 
 public class MusicItem implements Serializable{

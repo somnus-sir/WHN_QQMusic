@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#000"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="43dp"
+    android:paddingLeft="22.5dp"
+    android:paddingRight="22.5dp"
+    android:paddingTop="46dp" >
+    <Button
+        android:id="@+id/btn_delete_musicplayer"
+        android:layout_width="fill_parent"
+        android:layout_height="42dip"
+        android:gravity="center"
+        android:background="@drawable/bt_radius_green_shape"
+        android:text="删除音乐"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <Button
+        android:id="@+id/btn_shared_musicplayer"
+        android:layout_width="fill_parent"
+        android:layout_height="42dip"
+        android:layout_marginTop="16dip"
+        android:gravity="center"
+        android:text="分享给好友"
+        android:textColor="#ffffff"
+        android:background="@drawable/bt_radius_green_shape"
+        android:textSize="18sp" />
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="42dip"
+        android:layout_marginTop="16dip"
+        android:background="@drawable/bt_radius_green_shape"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+</LinearLayout>

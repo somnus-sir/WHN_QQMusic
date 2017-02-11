@@ -1,5 +1,6 @@
 package com.whn.whn.whn_qqmusic.activity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,7 +15,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,6 +73,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
     TextView tvTimeLeft;
     @InjectView(R.id.ll_musicbg_musicplayer)
     LinearLayout llMusicbgMusicplayer;
+    @InjectView(R.id.iv_menu_musicplayer)
+    ImageView ivMenuMusicplayer;
     private MyServiceConnection serviceConnection;
     private MusicPlayerService.MusicController music;
     private String totalTime;
@@ -100,6 +106,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private HttpUtils httpUtils;
     private String musicName;
     private String fileName;
+    private Dialog mCameraDialog;
 
 
     @Override
@@ -185,7 +192,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.iv_playmode, R.id.iv_pre, R.id.iv_play_pause, R.id.iv_next, R.id.iv_list, R.id.iv_back})
+    @OnClick({R.id.iv_playmode, R.id.iv_pre, R.id.iv_play_pause, R.id.iv_next, R.id.iv_list,R.id.iv_menu_musicplayer, R.id.iv_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_playmode:
@@ -206,12 +213,80 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 music.preNext(MusicPlayerService.PLAY_NEXT);
                 break;
             case R.id.iv_list:
+                Toast.makeText(this, "播放列表", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.iv_menu_musicplayer:
+                Toast.makeText(this, "菜单", Toast.LENGTH_SHORT).show();
+                showDialogView();
+                break;
         }
     }
+
+    /**
+     * 显示底部的diglog
+     */
+    private void showDialogView() {
+        mCameraDialog = new Dialog(this, R.style.my_dialog);
+        //获取Dialog布局
+        LinearLayout dialogView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_dialog_musicplayer, null);
+        dialogView.findViewById(R.id.btn_delete_musicplayer).setOnClickListener(btnlistener);
+        dialogView.findViewById(R.id.btn_shared_musicplayer).setOnClickListener(btnlistener);
+        dialogView.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
+        mCameraDialog.setContentView(dialogView);
+        //使其从底部显示
+        Window dialogWindow = mCameraDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+//        lp.x = 0; // 新位置X坐标
+//        lp.y = -20; // 新位置Y坐标
+        dialogView.measure(0, 0);
+        lp.width = (int) getResources().getDisplayMetrics().widthPixels; // 屏幕的宽度
+        lp.height = dialogView.getMeasuredHeight();//View的高度
+        lp.alpha = 9f; // 透明度
+        dialogWindow.setAttributes(lp);
+        mCameraDialog.show();
+    }
+
+    /**
+     * dialog监听
+     */
+    private View.OnClickListener btnlistener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_delete_musicplayer:
+                    //dialog消失,播放下一首,删除文件,更新列表
+                    //获取这首歌
+//                    MusicItem currentMusic = music.getCurrentMusic();
+//                    File file = new File(currentMusic.data);
+//                    if (mCameraDialog.isShowing()) {
+//                        mCameraDialog.dismiss();
+//                    }
+//                    if (MusicPlayerService.currentMode==1){//如果为单曲循环,切换模式
+//                        MusicPlayerService.currentMode=0;
+//                    }
+//                    music.preNext(MusicPlayerService.PLAY_NEXT);
+//                    //删除这首歌
+//                    file.getAbsoluteFile().delete();
+//                    //删除之后,QQ音乐搜索不到,音乐播放器搜索不到,360能搜到这首歌,手机音乐搜到,但不能播放
+                    Toast.makeText(MusicPlayerActivity.this, "删除", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btn_shared_musicplayer:
+                    Toast.makeText(MusicPlayerActivity.this, "分享", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btn_cancel:
+                    if (mCameraDialog.isShowing()) {
+                        mCameraDialog.dismiss();
+                    }
+                    break;
+            }
+        }
+    };
 
     /**
      * 更新播放模式的图标
@@ -230,6 +305,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         }
 
     }
+
 
     private class MyOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
         @Override
@@ -306,9 +382,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 fileName = music.getCurrentMusic().displayName.split("\\.")[0];
                 musicName = fileName.split("-")[1].split("\\[")[0].trim();
                 File file = new File(Environment.getExternalStorageDirectory(), musicName + ".lrc");
-
-                Toast.makeText(context, musicName, Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(context, musicName, Toast.LENGTH_SHORT).show();
                 mLyricView.loadLyrics(file);
                 //更新歌词
                 updatalyric();

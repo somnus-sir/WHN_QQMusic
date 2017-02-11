@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Created by fullcircle on 2017/1/15.
+ * Created by whn on 2017/1/15.
  */
 
 public class MusicPlayerService extends Service {
@@ -283,6 +283,9 @@ public class MusicPlayerService extends Service {
         //manager.cancel(1); cancel方法可以消除通知栏中的通知
     }
 
+    /**
+     * 自定义通知栏
+     */
     private void sendCustomNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
         builder.setSmallIcon(R.drawable.music_default_bg);
@@ -297,6 +300,9 @@ public class MusicPlayerService extends Service {
 
     }
 
+    /**
+     * 获取大View的方法
+     */
     private RemoteViews getBigRemoteViews() {
         //构造第一个参数 包名 第二个参数 布局的资源id
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_big);
@@ -339,6 +345,11 @@ public class MusicPlayerService extends Service {
         return pendingIntent;
     }
 
+
+    /**
+     * 获取小View并设置点击事件
+     * @return
+     */
     private RemoteViews getRemoteViews() {
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.notification_nomal);
         remoteViews.setTextViewText(R.id.tv_notification_title, musics.get(currentPosition).title);
@@ -360,6 +371,9 @@ public class MusicPlayerService extends Service {
         return pendingIntent;
     }
 
+    /**
+     * 后一首,点击事件
+     */
     private PendingIntent getNextPendingIntent() {
         Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
         intent.putExtra("fromNotification", true);
@@ -369,6 +383,9 @@ public class MusicPlayerService extends Service {
         return pendingIntent;
     }
 
+    /**
+     * 前一首,点击事件
+     */
     private PendingIntent getPrePendingIntent() {
         Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
         intent.putExtra("fromNotification", true);

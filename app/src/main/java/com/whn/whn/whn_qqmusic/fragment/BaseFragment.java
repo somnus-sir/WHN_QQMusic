@@ -44,8 +44,6 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 初始化控件
-     *
-     * @param view
      */
     protected abstract void initView(View view);
 

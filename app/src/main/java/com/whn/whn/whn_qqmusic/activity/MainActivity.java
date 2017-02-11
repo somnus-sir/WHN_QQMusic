@@ -2,8 +2,11 @@ package com.whn.whn.whn_qqmusic.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -32,10 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView ivMenuMain;
     @InjectView(R.id.rb_me_main)
     RadioButton rbMeMain;
-    @InjectView(R.id.rb_music_main)
-    RadioButton rbMusicMain;
-    @InjectView(R.id.rb_find_main)
-    RadioButton rbFindMain;
+    //    @InjectView(R.id.rb_music_main)
+//    RadioButton rbMusicMain;
+//    @InjectView(R.id.rb_find_main)
+//    RadioButton rbFindMain;
     @InjectView(R.id.rg_main)
     RadioGroup rgMain;
     @InjectView(R.id.activity_main)
@@ -46,6 +49,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btFindMain;
     private int checkedRadioButtonId;
     private ArrayList<RadioButton> buttons;
+    private static boolean isExit = false;
+    private static Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +73,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化view
      */
     private void initView() {
-        rbFindMain.setOnClickListener(this);
         rbMeMain.setOnClickListener(this);
-        rbMusicMain.setOnClickListener(this);
+//        rbFindMain.setOnClickListener(this);
+//        rbMusicMain.setOnClickListener(this);
         btFindMain.setOnClickListener(this);
+        ivMenuMain.setOnClickListener(this);
 
         buttons = new ArrayList<>();
-        buttons.add(rbFindMain);
         buttons.add(rbMeMain);
-        buttons.add(rbMusicMain);
+//        buttons.add(rbFindMain);
+//        buttons.add(rbMusicMain);
 
     }
 
@@ -83,21 +95,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 createFragment(R.id.rb_me_main);
                 break;
 
-            case R.id.rb_music_main:
-                changedShow(rbMusicMain);
-                createFragment(R.id.rb_music_main);
-                break;
-
-            case R.id.rb_find_main:
-                changedShow(rbFindMain);
-                createFragment(R.id.rb_find_main);
-                break;
+//            case R.id.rb_music_main:
+//                changedShow(rbMusicMain);
+//                createFragment(R.id.rb_music_main);
+//                break;
+//
+//            case R.id.rb_find_main:
+//                changedShow(rbFindMain);
+//                createFragment(R.id.rb_find_main);
+//                break;
 
             case R.id.bt_find_main:
                 Toast.makeText(this, "刷新列表", Toast.LENGTH_SHORT).show();
                 LocalFragment fragment = (LocalFragment) getSupportFragmentManager().findFragmentById(R.id.fl_fragment_main);
                 fragment.initData();
+                fragment.refreshData();
                 break;
+
+            case R.id.iv_menu_main:
+//                Toast.makeText(this, "退出", Toast.LENGTH_SHORT).show();
+                exit();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            Toast.makeText(getApplicationContext(), "再按一次后退键退出程序", Toast.LENGTH_SHORT).show();
+            // 利用handler延迟发送更改状态信息
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            this.finish();
         }
     }
 
@@ -148,6 +186,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tintManager.setNavigationBarTintResource(R.color.colorPrimary);
         }
     }
-
 
 }

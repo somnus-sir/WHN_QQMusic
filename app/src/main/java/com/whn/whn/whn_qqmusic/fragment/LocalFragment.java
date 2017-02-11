@@ -31,6 +31,7 @@ public class LocalFragment extends BaseFragment {
     @InjectView(R.id.lv_music)
     ListView lv_music;
     private MusicAdapter adapter;
+    private ArrayList<MusicItem> musics;
 
     @Override
     public int getLayoutId() {
@@ -45,7 +46,7 @@ public class LocalFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //创建集合用来保存所有的音乐
-                ArrayList<MusicItem> musics = new ArrayList<MusicItem>();
+                musics = new ArrayList<MusicItem>();
                 //通过适配器获取一个游标
                 Cursor cursor = adapter.getCursor();
                 //如果游标不为空
@@ -109,6 +110,11 @@ public class LocalFragment extends BaseFragment {
                         Media.ARTIST,//艺术家
                         Media.DISPLAY_NAME}//文件名字
                 , null, null, null);
+    }
+
+
+    public void refreshData(){
+        adapter.notifyDataSetChanged();
     }
 
 
