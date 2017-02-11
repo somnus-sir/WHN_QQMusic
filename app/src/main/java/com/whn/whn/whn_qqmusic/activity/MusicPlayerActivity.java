@@ -15,13 +15,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -35,6 +39,7 @@ import com.whn.whn.whn_qqmusic.service.MusicPlayerService;
 import com.whn.whn.whn_qqmusic.utils.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.ButterKnife;
@@ -107,6 +112,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
     private String musicName;
     private String fileName;
     private Dialog mCameraDialog;
+    private LinearLayout dialogView;
+    private ArrayList<MusicItem> musics;
 
 
     @Override
@@ -143,6 +150,9 @@ public class MusicPlayerActivity extends AppCompatActivity {
         handler.sendEmptyMessageDelayed(UPDATA_LYRIC, 50);
     }
 
+    /**
+     * 更新播放时间
+     */
     private void updataPlayedTime() {
         //Log.e(getClass().getSimpleName(),"updataPlayedTime");
         //获取当前播放的位置
@@ -158,8 +168,13 @@ public class MusicPlayerActivity extends AppCompatActivity {
         handler.sendEmptyMessageDelayed(UPDATA_PLAYED_TIME, 500);
     }
 
+    /**
+     * 初始化服务
+     */
     private void initService() {
         Intent intent = getIntent();
+        Intent i = getIntent();
+        musics = (ArrayList<MusicItem>) i.getSerializableExtra("musics");
         intent.setClass(getApplicationContext(), MusicPlayerService.class);
         startService(intent);//会执行 onCreate onStartCommand(会多次执行)
         //混合方式开启服务
@@ -214,14 +229,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 break;
             case R.id.iv_list:
                 Toast.makeText(this, "播放列表", Toast.LENGTH_SHORT).show();
-
+                showbottomDialog("list");
                 break;
             case R.id.iv_back:
                 finish();
                 break;
             case R.id.iv_menu_musicplayer:
                 Toast.makeText(this, "菜单", Toast.LENGTH_SHORT).show();
-                showDialogView();
+                showbottomDialog("menu");
                 break;
         }
     }
@@ -229,21 +244,25 @@ public class MusicPlayerActivity extends AppCompatActivity {
     /**
      * 显示底部的diglog
      */
-    private void showDialogView() {
+    private void showbottomDialog(String s) {
         mCameraDialog = new Dialog(this, R.style.my_dialog);
         //获取Dialog布局
-        LinearLayout dialogView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_dialog_musicplayer, null);
-        dialogView.findViewById(R.id.btn_delete_musicplayer).setOnClickListener(btnlistener);
-        dialogView.findViewById(R.id.btn_shared_musicplayer).setOnClickListener(btnlistener);
-        dialogView.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
+        if (s=="menu"){
+            dialogView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_dialog_musicplayer, null);
+            dialogView.findViewById(R.id.btn_delete_musicplayer).setOnClickListener(btnlistener);
+            dialogView.findViewById(R.id.btn_shared_musicplayer).setOnClickListener(btnlistener);
+            dialogView.findViewById(R.id.btn_cancel).setOnClickListener(btnlistener);
+        }else if(s=="list"){
+            dialogView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_dialog_list_musicplayer, null);
+            ListView lv = (ListView) dialogView.findViewById(R.id.lv_list_dialog);
+            lv.setAdapter(new lvAdapter());
+        }
         mCameraDialog.setContentView(dialogView);
         //使其从底部显示
         Window dialogWindow = mCameraDialog.getWindow();
         dialogWindow.setGravity(Gravity.BOTTOM);
         dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
         WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-//        lp.x = 0; // 新位置X坐标
-//        lp.y = -20; // 新位置Y坐标
         dialogView.measure(0, 0);
         lp.width = (int) getResources().getDisplayMetrics().widthPixels; // 屏幕的宽度
         lp.height = dialogView.getMeasuredHeight();//View的高度
@@ -251,6 +270,53 @@ public class MusicPlayerActivity extends AppCompatActivity {
         dialogWindow.setAttributes(lp);
         mCameraDialog.show();
     }
+
+    private class lvAdapter extends BaseAdapter{
+        @Override
+        public int getCount() {
+            return musics.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return musics.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if (convertView==null){
+                viewHolder = new ViewHolder();
+                convertView = View.inflate(getApplicationContext(),R.layout.item_music_lv,null);
+                viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+                viewHolder.tvArtist = (TextView) convertView.findViewById(R.id.tv_artist);
+                viewHolder.tvSize = (TextView) convertView.findViewById(R.id.tv_size);
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            MusicItem musicItem = musics.get(position);
+            viewHolder.tvTitle.setText(musicItem.title);
+            viewHolder.tvArtist.setText(musicItem.artist);
+            String size = Formatter.formatFileSize(getApplicationContext(),musicItem.size);
+            viewHolder.tvSize.setText(size);
+
+            return convertView;
+        }
+    }
+    static class ViewHolder {
+        TextView tvTitle;
+        TextView tvArtist;
+        TextView tvSize;
+    }
+
+
 
     /**
      * dialog监听

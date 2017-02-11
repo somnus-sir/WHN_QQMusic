@@ -43,6 +43,7 @@ public class MusicPlayerService extends Service {
      * 记录当前的播放模式
      */
     public static int currentMode = 0;
+    private boolean fromNotification;
 
     @Nullable
     @Override
@@ -159,7 +160,7 @@ public class MusicPlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //区分这个意图是从通知中来还是从上一个activity中来
-        boolean fromNotification = intent.getBooleanExtra("fromNotification", false);
+        fromNotification = intent.getBooleanExtra("fromNotification", false);
         if (fromNotification) {
             //说明这个意图是通知发出来的
             int operation = intent.getIntExtra("operation", 0);
